@@ -6,15 +6,20 @@ export default class TodoForm extends Component {
 		super(props)
 
 		this.state = {
+			id: 0,
 			todoName: '',
-			isCompleted: false
+			isCompleted: false,
+			isEditable: false
 		}
+
+		this.onChange = this.onChange.bind(this)
+		this.onSubmit = this.onSubmit.bind(this)
 	}
 
 	onChange (e) {
-		let { name, type, value, checked } = e.target;
+		let { name, value } = e.target;
 		this.setState({
-			[name]: type === 'checkbox' ? checked : value 
+			[name]: value
 		})
 	}
 
@@ -22,14 +27,14 @@ export default class TodoForm extends Component {
 	onSubmit (e) {
 		e.preventDefault()
 		this.props.formData(this.state)
+		this.setState({id: this.state.id + 1, todoName: ''})
 	}
 	
 
 	render () {
 		return (
-			<form onSubmit={this.onSubmit.bind(this)}>
-				<input name="todoName" value={this.state.todoName} onChange={e => this.onChange(e)} />
-				<input type="checkbox" name="isCompleted" checked={this.state.isCompleted} onChange={e => this.onChange(e)} />
+			<form onSubmit={this.onSubmit}>
+				<input name="todoName" value={this.state.todoName} onChange={this.onChange} />
 				<input type="submit" value="Add todo"/>
 			</form>
 		)
